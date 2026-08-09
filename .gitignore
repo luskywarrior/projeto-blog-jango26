@@ -54,6 +54,7 @@ atlassian-ide-plugin.xml
 # Python #
 *.py[cod]
 *$py.class
+geradordesenha.py
 
 # Distribution / packaging
 .Python build/
