@@ -1,0 +1,1 @@
+python /djangoapp/project/manage.py migrate --noinput
