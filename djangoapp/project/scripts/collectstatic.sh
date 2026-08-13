@@ -1,3 +1,1 @@
-#!/bin/sh
-
 python /djangoapp/project/manage.py collectstatic --noinput
