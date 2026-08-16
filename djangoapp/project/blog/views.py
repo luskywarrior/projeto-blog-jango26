@@ -1,11 +1,37 @@
+from blog.models import Post
+from django.core.paginator import Paginator
 from django.shortcuts import render
 
 
+PER_PAGE = 9
+
+
 def index(request):
+    posts = Post.obj1.get_published()
+
+    paginator = Paginator(posts, PER_PAGE)
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     return render(
         request,
         'blog/pages/index.html',
         {
-            'nome': ' Lucio'
+            'page_obj': page_obj,
         }
+    )
+
+
+def page(request):
+    return render(
+        request,
+        'blog/pages/page.html',
+    )
+
+
+def post(request):
+    return render(
+        request,
+        'blog/pages/post.html',
     )
