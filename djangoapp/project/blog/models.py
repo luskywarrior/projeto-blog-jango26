@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 from django_summernote.models import AbstractAttachment
 from utils.images import resize_image
 from utils.rands import slugify_new
@@ -97,7 +98,6 @@ class PostManager(models.Manager):
 
 
 class Post(models.Model):
-
     class Meta:
         verbose_name = 'Post'
         verbose_name_plural = 'Posts'
@@ -148,19 +148,15 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        if not self.is_published:
+            return reverse('blog:index')
+        return reverse('blog:post', args=(self.slug,))
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify_new(self.title, 4)
 
         current_cover_name = str(self.cover.name)
-
         super_save = super().save(*args, **kwargs)
         cover_changed = False
-
-        if self.cover:
-            cover_changed = current_cover_name != self.cover.name
-
-        if cover_changed:
-            resize_image(self.cover, 900, True, 70)
-
-        return super_save
