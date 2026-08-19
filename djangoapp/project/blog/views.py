@@ -1,3 +1,5 @@
+from typing import Any
+
 from blog.models import Post, Page
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -9,11 +11,25 @@ from django.http import Http404
 PER_PAGE = 9
 
 
+# class PostListView(ListView):
+#     model = Post
+#     template_name = 'blog/pages/index.html'
+#     context_object_name = 'posts'
+#     ordering = '-pk',
+#     paginate_by = PER_PAGE
+#     queryset = Post.obj1.get_published()
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+
+#         context.update({'page_title': 'Home -'})
+
+#         return context
+
+
 def index(request):
     posts = Post.obj1.get_published()
-
     paginator = Paginator(posts, PER_PAGE)
-
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
@@ -87,16 +103,16 @@ def page(request, slug):
         .first()
     )
 
-    if page is None:
+    if page_obj is None:
         raise Http404
 
-    page_title = f'{page.title} - Página - '
+    page_title = f'{page_obj.title}  - Página - '
 
     return render(
         request,
         'blog/pages/page.html',
         {
-            'page': page,
+            'page': page_obj,
             'page_title': page_title,
         }
     )

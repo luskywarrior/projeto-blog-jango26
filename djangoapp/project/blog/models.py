@@ -165,3 +165,11 @@ class Post(models.Model):
         current_cover_name = str(self.cover.name)
         super_save = super().save(*args, **kwargs)
         cover_changed = False
+
+        if self.cover:
+            cover_changed = current_cover_name != self.cover.name
+
+        if cover_changed:
+            resize_image(self.cover, 900, True, 70)
+
+        return super_save
